@@ -2,12 +2,20 @@ import { useState, useEffect } from "react"
 import ReactQuill from "react-quill"
 import "react-quill/dist/quill.snow.css"
 
+var toolbar = [
+  ["bold", "italic", "underline"],
+  [{ "header": [1, 2, 3, false] }],
+  [{ "list": "ordered" }, { "list": "bullet" }],
+  ["link", "blockquote"],
+  ["clean"]
+]
+
 export default function Editor({ selected, onChange }) {
   const [value, setValue] = useState("")
 
-  useEffect(() => {
-    setValue(selected?.content || "")
-  }, [selected?.id])
+  useEffect(function() {
+    setValue(selected ? selected.content || "" : "")
+  }, [selected && selected.id])
 
   function handleChange(val) {
     setValue(val)
@@ -15,23 +23,26 @@ export default function Editor({ selected, onChange }) {
   }
 
   if (!selected) return (
-    <div style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "100%", color: "#aaa", flexDirection: "column", gap: 10 }}>
-      <span style={{ fontSize: 48 }}>📄</span>
-      <p>Select a page from the left</p>
+    <div className="empty-state">
+      <span className="empty-icon">📄</span>
+      <p className="empty-title">Select a page to start editing</p>
+      <p className="empty-sub">Click any page from the left panel</p>
     </div>
   )
 
   if (selected.type === "container") return (
-    <div style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "100%", color: "#aaa", flexDirection: "column", gap: 10 }}>
-      <span style={{ fontSize: 48 }}>📁</span>
-      <p>This is a folder — click a page inside it</p>
+    <div className="empty-state">
+      <span className="empty-icon">📁</span>
+      <p className="empty-title">This is a collection</p>
+      <p className="empty-sub">Select a page inside it to edit</p>
     </div>
   )
 
   return (
-    <div style={{ padding: "30px 40px" }}>
-      <h2 style={{ marginBottom: 20 }}>{selected.name}</h2>
-      <ReactQuill theme="snow" value={value} onChange={handleChange} />
+    <div className="editor-area">
+      <h2 className="page-title">{selected.name}</h2>
+      <div className="title-line"></div>
+      <ReactQuill theme="snow" value={value} onChange={handleChange} modules={{ toolbar: toolbar }} placeholder="Start writing..." />
     </div>
   )
 }
