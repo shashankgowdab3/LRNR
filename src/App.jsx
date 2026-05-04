@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react"
-import Tree from "./components/Tree"
+import Tree from "./components/TreeContainer"
 import Editor from "./components/Editor"
 import { DEFAULT_TREE } from "./constants"
 import "./styles.css"
