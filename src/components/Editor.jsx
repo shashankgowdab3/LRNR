@@ -2,7 +2,7 @@ import { useState, useEffect } from "react"
 import ReactQuill from "react-quill"
 import "react-quill/dist/quill.snow.css"
 
-var toolbar = [
+const toolbar = [
   ["bold", "italic", "underline"],
   [{ "header": [1, 2, 3, false] }],
   [{ "list": "ordered" }, { "list": "bullet" }],

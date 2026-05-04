@@ -25,7 +25,7 @@ const DEFAULT_TREE = [
 ]
 
 function updateContent(nodes, id, value) {
-  return nodes.map(function (node) {
+  return nodes.map(function(node) {
     if (node.id === id) return { ...node, content: value }
     return { ...node, children: updateContent(node.children, id, value) }
   })
@@ -38,35 +38,34 @@ export default function App() {
   const [activeTab, setActiveTab] = useState("All")
   const [sidebarOpen, setSidebarOpen] = useState(true)
 
-  useEffect(function () {
-    var saved = localStorage.getItem("tree")
+  useEffect(function() {
+    const saved = localStorage.getItem("tree")   // changed var to const
     setTree(saved ? JSON.parse(saved) : DEFAULT_TREE)
   }, [])
 
-  useEffect(function () {
+  useEffect(function() {
     if (tree.length > 0) localStorage.setItem("tree", JSON.stringify(tree))
   }, [tree])
 
   function handleEditorChange(value) {
     if (!selected) return
-    setTree(function (prev) { return updateContent(prev, selected.id, value) })
-    setSelected(function (prev) { return { ...prev, content: value } })
+    setTree(function(prev) { return updateContent(prev, selected.id, value) })
+    setSelected(function(prev) { return { ...prev, content: value } })
   }
 
   return (
     <div className={darkMode ? "app dark" : "app"}>
 
       <div className="topbar">
-
         <div className="topbar-left">
-          <button className="hamburger" onClick={function () { setSidebarOpen(!sidebarOpen) }}>☰</button>
+          <button className="hamburger" onClick={function() { setSidebarOpen(!sidebarOpen) }}>☰</button>
           <div>
-            {["All", "Board", "Graph", "Recent"].map(function (tab) {
+            {["All", "Board", "Graph", "Recent"].map(function(tab) {
               return (
                 <button
                   key={tab}
                   className={activeTab === tab ? "tab active" : "tab"}
-                  onClick={function () { setActiveTab(tab) }}
+                  onClick={function() { setActiveTab(tab) }}
                 >{tab}</button>
               )
             })}
@@ -79,7 +78,7 @@ export default function App() {
 
         <div className="topbar-right">
           <button className="invite-btn">👥 Invite Member</button>
-          <button className="darkmode-btn" onClick={function () { setDarkMode(!darkMode) }}>
+          <button className="darkmode-btn" onClick={function() { setDarkMode(!darkMode) }}>
             {darkMode ? "☀️" : "🌙"}
           </button>
           <div className="avatar">
@@ -88,6 +87,7 @@ export default function App() {
           </div>
         </div>
       </div>
+
       <div className="body">
         {sidebarOpen && (
           <div className="sidebar">

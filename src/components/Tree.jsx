@@ -25,8 +25,8 @@ function TreeNode({ node, depth, selected, setSelected, tree, setTree }) {
   const [isOpen, setIsOpen] = useState(false)
   const [showMenu, setShowMenu] = useState(false)
 
-  var isFolder = node.type === "container"
-  var isSelected = selected && selected.id === node.id
+  const isFolder = node.type === "container"    // const because it never changes
+  const isSelected = selected && selected.id === node.id  // const because it never changes
 
   function handleClick() {
     if (isFolder) setIsOpen(!isOpen)
@@ -49,14 +49,15 @@ function TreeNode({ node, depth, selected, setSelected, tree, setTree }) {
 
   function handleRename(e) {
     e.stopPropagation()
-    var name = prompt("New name:", node.name)
+    const name = prompt("New name:", node.name)   // const because we never reassign it
     if (name && name.trim()) setTree(renameNode(tree, node.id, name.trim()))
     setShowMenu(false)
   }
 
   function handleDelete(e) {
     e.stopPropagation()
-    if (confirm("Delete " + node.name + "?")) {
+    const confirmed = confirm("Delete " + node.name + "?")  // const because we never reassign it
+    if (confirmed) {
       setTree(deleteNode(tree, node.id))
       if (selected && selected.id === node.id) setSelected(null)
     }
@@ -115,14 +116,15 @@ export default function Tree({ tree, setTree, selected, setSelected }) {
   const [search, setSearch] = useState("")
 
   function addRootCollection() {
-    setTree([...tree, { id: uuid(), name: "New Collection", type: "container", content: "", children: [] }])
+    const newFolder = { id: uuid(), name: "New Collection", type: "container", content: "", children: [] }  // const because never reassigned
+    setTree([...tree, newFolder])
   }
 
   function filterTree(nodes, text) {
     if (!text) return nodes
     return nodes.reduce(function(acc, node) {
       if (node.name.toLowerCase().includes(text.toLowerCase())) return [...acc, node]
-      var kids = filterTree(node.children, text)
+      const kids = filterTree(node.children, text)   // const because never reassigned
       if (kids.length) return [...acc, { ...node, children: kids }]
       return acc
     }, [])
