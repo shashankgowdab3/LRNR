@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useMemo } from "react"
 import { v4 as uuid } from "uuid"
 
 function addNode(tree, parentId, newNode) {
@@ -118,7 +118,7 @@ export default function Tree({ tree, setTree, selected, setSelected }) {
   const [search, setSearch] = useState("")
 
   function addRootCollection() {
-    const newFolder = { id: uuid(), name: "New Collection", type: "container", content: "", children: [] } 
+    const newFolder = { id: uuid(), name: "New Collection", type: "container", content: "", children: [] }
     setTree([...tree, newFolder])
   }
 
@@ -126,11 +126,15 @@ export default function Tree({ tree, setTree, selected, setSelected }) {
     if (!text) return nodes
     return nodes.reduce(function(acc, node) {
       if (node.name.toLowerCase().includes(text.toLowerCase())) return [...acc, node]
-      const kids = filterTree(node.children, text)  
+      const kids = filterTree(node.children, text)
       if (kids.length) return [...acc, { ...node, children: kids }]
       return acc
     }, [])
   }
+
+  const visibleNodes = useMemo(function() {
+    return filterTree(tree, search)
+  }, [tree, search])
 
   return (
     <div style={{ height: "100%", display: "flex", flexDirection: "column" }}>
@@ -147,7 +151,7 @@ export default function Tree({ tree, setTree, selected, setSelected }) {
         <button className="add-btn" onClick={addRootCollection} title="Add collection">+</button>
       </div>
       <div className="tree-list">
-        {filterTree(tree, search).map(function(node) {
+        {visibleNodes.map(function(node) {
           return (
             <TreeNode
               key={node.id}
