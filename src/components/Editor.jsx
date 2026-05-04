@@ -13,13 +13,24 @@ const toolbar = [
 export default function Editor({ selected, onChange }) {
   const [value, setValue] = useState("")
 
-  useEffect(function() {
+  useEffect(function () {
     setValue(selected ? selected.content || "" : "")
   }, [selected && selected.id])
 
+  useEffect(function () {
+
+    const timer = setTimeout(function () {
+      onChange(value)
+    }, 500)
+
+    return function () {
+      clearTimeout(timer)
+    }
+
+  }, [value])
+
   function handleChange(val) {
     setValue(val)
-    onChange(val)
   }
 
   if (!selected) return (
@@ -42,7 +53,13 @@ export default function Editor({ selected, onChange }) {
     <div className="editor-area">
       <h2 className="page-title">{selected.name}</h2>
       <div className="title-line"></div>
-      <ReactQuill theme="snow" value={value} onChange={handleChange} modules={{ toolbar: toolbar }} placeholder="Start writing..." />
+      <ReactQuill
+        theme="snow"
+        value={value}
+        onChange={handleChange}
+        modules={{ toolbar: toolbar }}
+        placeholder="Start writing..."
+      />
     </div>
   )
 }
