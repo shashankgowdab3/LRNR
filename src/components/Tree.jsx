@@ -25,8 +25,8 @@ function TreeNode({ node, depth, selected, setSelected, tree, setTree }) {
   const [isOpen, setIsOpen] = useState(false)
   const [showMenu, setShowMenu] = useState(false)
 
-  const isFolder = node.type === "container"    // const because it never changes
-  const isSelected = selected && selected.id === node.id  // const because it never changes
+  const isFolder = node.type === "container" 
+  const isSelected = selected && selected.id === node.id  
 
   function handleClick() {
     if (isFolder) setIsOpen(!isOpen)
@@ -34,11 +34,13 @@ function TreeNode({ node, depth, selected, setSelected, tree, setTree }) {
   }
 
   function handleAddPage(e) {
-    e.stopPropagation()
-    setTree(addNode(tree, node.id, { id: uuid(), name: "New Page", type: "leaf", content: "", children: [] }))
-    setIsOpen(true)
-    setShowMenu(false)
-  }
+  e.stopPropagation()
+  const newPage = { id: uuid(), name: "New Page", type: "leaf", content: "", children: [] }
+  setTree(addNode(tree, node.id, newPage))
+  setSelected(newPage) 
+  setIsOpen(true)
+  setShowMenu(false)
+}
 
   function handleAddFolder(e) {
     e.stopPropagation()
@@ -49,14 +51,14 @@ function TreeNode({ node, depth, selected, setSelected, tree, setTree }) {
 
   function handleRename(e) {
     e.stopPropagation()
-    const name = prompt("New name:", node.name)   // const because we never reassign it
+    const name = prompt("New name:", node.name)   
     if (name && name.trim()) setTree(renameNode(tree, node.id, name.trim()))
     setShowMenu(false)
   }
 
   function handleDelete(e) {
     e.stopPropagation()
-    const confirmed = confirm("Delete " + node.name + "?")  // const because we never reassign it
+    const confirmed = confirm("Delete " + node.name + "?")  
     if (confirmed) {
       setTree(deleteNode(tree, node.id))
       if (selected && selected.id === node.id) setSelected(null)
@@ -124,7 +126,7 @@ export default function Tree({ tree, setTree, selected, setSelected }) {
     if (!text) return nodes
     return nodes.reduce(function(acc, node) {
       if (node.name.toLowerCase().includes(text.toLowerCase())) return [...acc, node]
-      const kids = filterTree(node.children, text)   // const because never reassigned
+      const kids = filterTree(node.children, text)  
       if (kids.length) return [...acc, { ...node, children: kids }]
       return acc
     }, [])

@@ -39,7 +39,7 @@ export default function App() {
   const [sidebarOpen, setSidebarOpen] = useState(true)
 
   useEffect(function() {
-    const saved = localStorage.getItem("tree")   // changed var to const
+    const saved = localStorage.getItem("tree")  
     setTree(saved ? JSON.parse(saved) : DEFAULT_TREE)
   }, [])
 
