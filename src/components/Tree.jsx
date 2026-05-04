@@ -118,7 +118,7 @@ export default function Tree({ tree, setTree, selected, setSelected }) {
   const [search, setSearch] = useState("")
 
   function addRootCollection() {
-    const newFolder = { id: uuid(), name: "New Collection", type: "container", content: "", children: [] }  // const because never reassigned
+    const newFolder = { id: uuid(), name: "New Collection", type: "container", content: "", children: [] } 
     setTree([...tree, newFolder])
   }
 
